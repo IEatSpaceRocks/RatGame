@@ -177,7 +177,7 @@ class Item():
                 SCREEN.blit(self.Image.Image, (self.x, self.y))
 
 def new_item(Image, FromX, RangeX, FromY, RangeY, Screen, RatImage):
-                    NewItem = Item(Image, rand(0, int(RangeX)) + FromX, rand(0, int(RangeY)) + FromY, Screen, RatImage, False)
+                    NewItem = Item(Image, rand(0, RangeX) + FromX, rand(0, RangeY) + FromY, Screen, RatImage, False)
                     Items.append(NewItem)
 
 
@@ -218,19 +218,19 @@ def update_screen():
     if ScreenVariables[CurrentScreen].Type == 1:
         for X, Y, Facing in zip(ScreenVariables[CurrentScreen].ListX, ScreenVariables[CurrentScreen].ListY, ScreenVariables[CurrentScreen].Facing):
             if Facing == 0:
-                if CurrentRatImage[Rat.Facing].Mask.overlap(AppleTree.Mask, (AppleTree.Rect.x - CurrentRatImage[Rat.Facing].Rect.x + 0, AppleTree.Rect.y - CurrentRatImage[Rat.Facing].Rect.y + 50)):
+                if CurrentRatImage[Rat.Facing].Mask.overlap(AppleTree.Mask, (AppleTree.Rect.x - CurrentRatImage[Rat.Facing].Rect.x + X, AppleTree.Rect.y - CurrentRatImage[Rat.Facing].Rect.y + Y)):
                     AppleTree.Image.set_alpha(128)
-                    SCREEN.blit(AppleTree.Image, (0, 50))
+                    SCREEN.blit(AppleTree.Image, (X, Y))
                 else:
                     AppleTree.Image.set_alpha(256)
-                    SCREEN.blit(AppleTree.Image, (0, 50))
+                    SCREEN.blit(AppleTree.Image, (X, Y))
             else:
-                if CurrentRatImage[Rat.Facing].Mask.overlap(AppleTreeMirrored.Mask, (AppleTreeMirrored.Rect.x - CurrentRatImage[Rat.Facing].Rect.x + 0, AppleTreeMirrored.Rect.y - CurrentRatImage[Rat.Facing].Rect.y + 50)):
+                if CurrentRatImage[Rat.Facing].Mask.overlap(AppleTreeMirrored.Mask, (AppleTreeMirrored.Rect.x - CurrentRatImage[Rat.Facing].Rect.x + X, AppleTreeMirrored.Rect.y - CurrentRatImage[Rat.Facing].Rect.y + Y)):
                     AppleTreeMirrored.Image.set_alpha(128)
-                    SCREEN.blit(AppleTreeMirrored.Image, (0, 50))
+                    SCREEN.blit(AppleTreeMirrored.Image, (X, Y))
                 else:
                     AppleTreeMirrored.Image.set_alpha(256)
-                    SCREEN.blit(AppleTreeMirrored.Image, (0, 50))
+                    SCREEN.blit(AppleTreeMirrored.Image, (X, Y))
     if ScreenVariables[CurrentScreen].Type == 2:
         InBush = False
         for X, Y, Facing in zip(ScreenVariables[CurrentScreen].ListX, ScreenVariables[CurrentScreen].ListY, ScreenVariables[CurrentScreen].Facing):
@@ -279,8 +279,8 @@ ScreenVariables = {"main": main, "screen11": screen11, "screen12": screen12, "sc
 
 for Screen in Screens:
     if ScreenVariables[Screen].Type == 1:
-        ScreenVariables[Screen].ListX.append(40 + 30 * rand(0, 11))
-        ScreenVariables[Screen].ListY.append(30 * rand(0, 15))
+        ScreenVariables[Screen].ListX.append(rand(0, 200))
+        ScreenVariables[Screen].ListY.append(rand(0, 200))
         ScreenVariables[Screen].Facing.append(rand(0, 1))
     if ScreenVariables[Screen].Type == 2:
         for i in range(rand(5, 8)):
@@ -364,7 +364,8 @@ while running:
             ScreenVariables[Screen].check_if_new_screen()
         if ScreenVariables[Screen].Type == 1:
             if Tick % 900 == 0:
-                new_item(Apple, 100, 600, 600, 100, Screen, RatApple)
+                for X, Y in zip(ScreenVariables[Screen].ListX, ScreenVariables[Screen].ListY):
+                    new_item(Apple, X + 10, 580, Y + 500, 100, Screen, RatApple)
 
     Tick += 1
         
