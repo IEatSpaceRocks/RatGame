@@ -4,9 +4,12 @@ import os
 import sqlite3
 import random
 
-# Initialize Pygame
+os.environ['SOL_VIDEO_CENTERED'] = '1'
 pygame.init()
 pygame.display.set_caption("Rat")
+
+Info = pygame.display.Info()
+ScreenWidth, ScreenHeight = Info.current_w, Info.current_h
 
 # Change the current working directory to the folder where your script is located
 script_path = os.path.dirname(os.path.abspath(__file__))
@@ -18,7 +21,7 @@ cursor = conn.cursor()
 conn.commit()
 
 # Set up display
-SCREEN = pygame.display.set_mode((800, 800))
+SCREEN = pygame.display.set_mode((900, 800), pygame.RESIZABLE)
 
 
 
@@ -304,6 +307,7 @@ for Screen in Screens:
 
 
 def draw_screen():
+    pygame.draw.rect(SCREEN, (139, 69, 19), (0, 0, ScreenWidth, ScreenHeight))
 
     # Clear the screen
     if CurrentScreen == "cloud":
@@ -324,6 +328,12 @@ def draw_screen():
     pygame.draw.rect(SCREEN, (211, 211, 211),(Rat.x - 26, Rat.y - 41, 52, 12))
     pygame.draw.rect(SCREEN, (0, 255, 0), (Rat.x - 25, Rat.y - 40, Rat.Health / 2, 10))
 
+    pygame.draw.rect(SCREEN, (139, 69, 19), (800, 0, 100, 800))
+    number = 28
+    for i in range(10):
+        pygame.draw.rect(SCREEN, (192, 163, 187), (825, number, 52, 52))
+        number += 77
+
     pygame.display.flip()
 
 
@@ -338,10 +348,9 @@ def draw_screen():
 running = True
 while running:
     for event in pygame.event.get():
+        key = pygame.key.get_pressed()
         if event.type == pygame.QUIT:
             running = False
-
-    key = pygame.key.get_pressed()
 
     if key[pygame.K_SPACE]:
         Rat.Sprinting = True
